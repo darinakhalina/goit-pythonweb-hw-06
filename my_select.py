@@ -1,6 +1,6 @@
 from sqlalchemy import func
 from connect import session
-from models import Student, Grade, Subject, Group
+from models import Student, Grade, Subject, Group, Teacher
 
 
 def select_1():
@@ -59,6 +59,41 @@ def select_4():
     return result
 
 
+def select_5(teacher_name: str):
+    result = (
+        session.query(Subject.name)
+        .join(Teacher, Teacher.id == Subject.teacher_id)
+        .filter(Teacher.name == teacher_name)
+        .all()
+    )
+    session.close()
+    return [subject.name for subject in result]
+
+
+def select_6(group_name: str):
+    result = (
+        session.query(Student.name)
+        .join(Group, Group.id == Student.group_id)
+        .filter(Group.name == group_name)
+        .all()
+    )
+    session.close()
+    return [student.name for student in result]
+
+
+def select_7(group_name: str, subject_name: str):
+    result = (
+        session.query(Student.name, Grade.grade)
+        .join(Group, Group.id == Student.group_id)
+        .join(Grade, Grade.student_id == Student.id)
+        .join(Subject, Subject.id == Grade.subject_id)
+        .filter(Group.name == group_name, Subject.name == subject_name)
+        .all()
+    )
+    session.close()
+    return result
+
+
 def main():
     result1 = select_1()
     print("Top 5 students with the highest average grades:")
@@ -85,6 +120,25 @@ def main():
 
     result4 = select_4()
     print(f"Average grade for the entire course: {result4:.2f}")
+
+    teacher_name = "Jessica Freeman"
+    result5 = select_5(teacher_name)
+    print(f"Courses taught by {teacher_name}:")
+    for subject in result5:
+        print(f"- {subject}")
+
+    group_name = "Group 1"
+    result6 = select_6(group_name)
+    print(f"Students in group '{group_name}':")
+    for student in result6:
+        print(f"- {student}")
+
+    group_name = "Group 1"
+    subject_name = "Mathematics"
+    result7 = select_7(group_name, subject_name)
+    print(f"Grades for students in group '{group_name}' for subject '{subject_name}':")
+    for student_name, grade in result7:
+        print(f"Student: {student_name}, Grade: {grade}")
 
 
 if __name__ == "__main__":
