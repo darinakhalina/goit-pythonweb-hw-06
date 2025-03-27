@@ -1,0 +1,22 @@
+[project]
+name = "goit-pythonweb-hw-06"
+version = "0.1.0"
+description = "HW-6"
+authors = [
+    {name = "Darina Khalina",email = "darina.khalina@namecheap.com"}
+]
+readme = "README.md"
+requires-python = ">=3.9,<4.0"
+
+[tool.poetry.dependencies]
+sqlalchemy = "^2.0.39"
+alembic = "^1.15.1"
+psycopg2 = "^2.9.10"
+alembic-postgresql-enum = "^1.7.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
