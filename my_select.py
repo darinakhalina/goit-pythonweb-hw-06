@@ -94,6 +94,42 @@ def select_7(group_name: str, subject_name: str):
     return result
 
 
+def select_8(teacher_name: str):
+    result = (
+        session.query(func.avg(Grade.grade).label("avg_grade"))
+        .join(Subject, Subject.id == Grade.subject_id)
+        .join(Teacher, Teacher.id == Subject.teacher_id)
+        .filter(Teacher.name == teacher_name)
+        .scalar()
+    )
+    session.close()
+    return result
+
+
+def select_9(student_id: str):
+    result = (
+        session.query(Subject.name)
+        .join(Grade)
+        .filter(Grade.student_id == student_id)
+        .distinct()
+        .all()
+    )
+    session.close()
+    return result
+
+
+def select_10(student_id: str, teacher_id: str):
+    result = (
+        session.query(Subject.name)
+        .join(Grade)
+        .filter(Grade.student_id == student_id, Subject.teacher_id == teacher_id)
+        .distinct()
+        .all()
+    )
+    session.close()
+    return result
+
+
 def main():
     result1 = select_1()
     print("Top 5 students with the highest average grades:")
@@ -139,6 +175,22 @@ def main():
     print(f"Grades for students in group '{group_name}' for subject '{subject_name}':")
     for student_name, grade in result7:
         print(f"Student: {student_name}, Grade: {grade}")
+
+    teacher_name = "Kayla Jones"
+    result8 = select_8(teacher_name)
+    print(f"Average grade given by {teacher_name}: {result8}")
+
+    student_id = "1"
+    result9 = select_9(student_id)
+    for course in result9:
+        print(course[0])
+
+    student_id = "1"
+    teacher_id = "1"
+    subjects = select_10(student_id, teacher_id)
+    print(f"Courses taught by {teacher_name} for {student_name}:")
+    for subject in subjects:
+        print(subject.name)
 
 
 if __name__ == "__main__":
