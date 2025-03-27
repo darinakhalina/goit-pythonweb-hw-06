@@ -2,6 +2,18 @@ from faker import Faker
 from models import Student, Group, Teacher, Subject, Grade
 from connect import session
 
+real_subjects = [
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "History",
+    "Literature",
+    "Geography",
+    "Computer Science",
+    "Art",
+]
+
 faker = Faker()
 
 
@@ -18,10 +30,10 @@ def main():
 
     subjects = [
         Subject(
-            name=f"Subject {faker.word()}",
+            name=subject_name,
             teacher_id=faker.random.choice(teacher_ids),
         )
-        for _ in range(1, 9)
+        for subject_name in real_subjects
     ]
     session.add_all(subjects)
     session.commit()
@@ -38,7 +50,6 @@ def main():
     session.commit()
     student_ids = [student.id for student in students]
 
-    # Создаем оценки
     grades = [
         Grade(
             student_id=faker.random.choice(student_ids),
