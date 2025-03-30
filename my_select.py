@@ -3,9 +3,7 @@ from sqlalchemy import func
 from connect import session
 from models import Student, Grade, Subject, Group, Teacher
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
 
